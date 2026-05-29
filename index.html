@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Archive — Art Institute of Chicago</title>
+
+    <!-- Favicons -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="assets/android-chrome-512x512.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/favicon-16x16.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="assets/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="./site.webmanifest" />
+
+    <!-- Open Graph (WhatsApp / social previews) -->
+    <meta
+      property="og:title"
+      content="Digital Archive — Art Institute of Chicago"
+    />
+    <meta
+      property="og:description"
+      content="Browse and filter selected works from the Art Institute of Chicago digital archive."
+    />
+    <meta
+      property="og:image"
+      content="https://YOUR-DEPLOYED-URL/android-chrome-512x512.png"
+    />
+    <meta property="og:url" content="https://YOUR-DEPLOYED-URL" />
+    <meta property="og:type" content="website" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <p id="logo">
+          <img
+            src="assets/logo(1).webp"
+            alt="Art Institute of Chicago digital archive"
+          />
+        </p>
+        <button class="hamburger-btn">
+          <span class="menu">MENU</span>
+          <ion-icon name="menu-outline" class="menu-outline"></ion-icon>
+        </button>
+        <button id="scroll-btn">
+          <ion-icon name="menu-outline" class="scroll-btn"></ion-icon>
+        </button>
+        <h1>ART INSTITUTE OF CHICAGO</h1>
+        <p id="description">
+          Selected works from the Art Institute of Chicago digital archive.
+        </p>
+      </header>
+      <main>
+        <div class="search-section">
+          <label for="search" class="search-label">EXPLORE</label>
+          <div class="search-wrapper">
+            <input
+              id="search"
+              type="text"
+              placeholder="Georgia O'Keeffe..."
+              autocomplete="off"
+            />
+          </div>
+        </div>
+        <nav id="mobile-menu">
+          <button class="close-menu-btn" aria-label="Close menu">
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+          <div id="filters"></div>
+        </nav>
+
+        <div class="status-wrapper">
+          <ion-icon name="sad-outline" class="not-found"></ion-icon>
+          <ion-icon name="bug" class="error"></ion-icon>
+          <ion-icon name="cloud-upload" class="loading"></ion-icon>
+          <ion-icon name="wifi" class="connection"></ion-icon>
+          <p id="status"></p>
+        </div>
+
+        <div id="gallery"></div>
+        <a href="#" id="scroll-to-top" class="hidden">Λ</a>
+      </main>
+    </div>
+    <footer>
+      <div class="footer-container">
+        <p class="footer-logo-link">
+          <a href="#" class="logo"
+            ><img
+              src="assets/logo(1).webp"
+              alt="Art Institute of Chicago digital archive"
+          /></a>
+        </p>
+        <ul class="social-container">
+          <li>
+            <a
+              href="https://www.linkedin.com/in/eugenia-demarchi"
+              class="social-border"
+              target="_blank"
+              title="LinkedIn"
+            >
+              <ion-icon name="logo-linkedin" class="social-icon"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="https://github.com/EugeniaDemarchi"
+              class="social-border"
+              target="_blank"
+              title="Github"
+            >
+              <ion-icon name="logo-github" class="social-icon"></ion-icon>
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://www.instagram.com/eugeniademarchi/"
+              class="social-border"
+              target="_blank"
+              title="Instagram"
+            >
+              <ion-icon name="logo-instagram" class="social-icon"></ion-icon>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <p class="copyright">&copy; 2026 Eugenia Demarchi</p>
+    </footer>
+
+    <script type="module" src="script.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+    <div id="modal-overlay" class="hidden">
+      <button class="close-modal-btn hidden" aria-label="Close modal">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    </div>
+    <div id="modal-card" class="hidden">
+      <button id="more-info-btn">More info +</button>
+    </div>
+  </body>
+</html>

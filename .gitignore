@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# TypeScript build artifacts
+script.d.ts
+script.d.ts.map
+script.js.map
+
+# AI assistant config (optional — your call)
+CLAUDE.md
