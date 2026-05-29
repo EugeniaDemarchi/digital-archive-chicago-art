@@ -143,7 +143,7 @@ header {
   font-size: 1rem;
 }
 h1 {
-  font-size: clamp(0.8rem, 10vw, 10rem);
+  font-size: clamp(0.8rem, 10vw, 8rem);
   grid-area: title;
   text-align: center;
   color: var(--color-border);
@@ -155,7 +155,7 @@ h1 {
   text-align: center;
   grid-area: description;
   font-family: var(--font-serif);
-  font-size: clamp(var(--text-lg), 5vw, var(--text-xxl));
+  font-size: clamp(var(--text-lg), 5vw, var(--text-xl));
   font-weight: var(--weight-medium);
   padding-top: 2rem;
 }
@@ -574,7 +574,7 @@ footer {
     border: none;
     border-radius: 2rem;
     padding: 1.2rem 1.3rem;
-    font-size: clamp(var(--text-sm), 2vw, var(--text-xl));
+    font-size: clamp(var(--text-sm), 2vw, var(--text-lg));
     font-weight: var(--weight-medium);
     transition: all 300ms ease;
     cursor: pointer;
