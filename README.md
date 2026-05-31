@@ -2,7 +2,7 @@
 
 > Browse and filter artworks from the [Art Institute of Chicago](https://www.artic.edu/) public API.
 
-![App screenshot]<img width="1891" height="796" alt="image" src="https://github.com/user-attachments/assets/5efee167-2ac9-4b7e-938b-025f356695e1" />
+<img width="1891" height="796" alt="image" src="https://github.com/user-attachments/assets/5efee167-2ac9-4b7e-938b-025f356695e1" />
 
 ---
 
