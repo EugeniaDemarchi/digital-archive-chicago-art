@@ -336,6 +336,7 @@ input:focus::placeholder {
   aspect-ratio: 4/3;
   display: block;
   object-fit: cover;
+  object-position: center;
   background-color: var(--color-bg-alt);
 }
 .work-title {

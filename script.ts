@@ -88,7 +88,14 @@ async function getJSON<T>(url: string): Promise<T> {
 
 async function getArtWorks(): Promise<ArtWork[]> {
   const data = await getJSON<ApiResponse>(API_URL);
-  return data.data || [];
+  const artworks = data.data || [];
+  const seenImages = new Set<string>();
+  return artworks.filter((art) => {
+    if (!art.image_id) return true;
+    if (seenImages.has(art.image_id)) return false;
+    seenImages.add(art.image_id);
+    return true;
+  });
 }
 
 async function getArtWorkDetail(id: number): Promise<ArtWorkDetail> {
@@ -360,8 +367,10 @@ input.addEventListener("input", (): void => {
 });
 
 function toggleMobileMenu(): void {
+  const isOpening = !mobileMenu.classList.contains("open");
   mobileMenu.classList.toggle("open");
   hamburgerBtn.classList.toggle("active");
+  document.body.style.overflow = isOpening ? "hidden" : "";
 }
 hamburgerBtn.addEventListener("click", toggleMobileMenu);
 
@@ -374,6 +383,7 @@ function clearActiveButtons(): void {
 function closeMobileMenu(): void {
   mobileMenu.classList.remove("open");
   hamburgerBtn.classList.remove("active");
+  document.body.style.overflow = "";
 }
 
 closeMenuBtn.addEventListener("click", (): void => {

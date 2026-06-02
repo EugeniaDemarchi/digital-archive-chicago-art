@@ -13,14 +13,12 @@ const closeModalBtn = document.querySelector(".close-modal-btn");
 const moreInfoBtn = document.getElementById("more-info-btn");
 //state
 let allArtWorks = [];
-let currentCategory;
-let detail = null;
-//CONFIG
+let currentCategory = "";
+//config
 const API_URL = "https://api.artic.edu/api/v1/artworks?fields=id,title,image_id,artist_title,artwork_type_title&limit=40";
 const API_URL_DETAIL = (id) => `https://api.artic.edu/api/v1/artworks/${id}?fields=id,title,image_id,thumbnail,artwork_type_title,artist_display,description,short_description,dimensions,medium_display,style_title`;
 const PLACEHOLDER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='843' height='562' viewBox='0 0 843 562'%3E%3Crect width='843' height='562' fill='%23e8e8e8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='24' fill='%23999'%3ENo image%3C/text%3E%3C/svg%3E";
 //data layer
-//generic fetch utility
 class NetworkError extends Error {
 }
 async function getJSON(url) {
@@ -40,12 +38,19 @@ async function getJSON(url) {
     catch {
         throw new Error("Invalid response format.");
     }
-    /*   return response.json(); */
 }
 async function getArtWorks() {
     const data = await getJSON(API_URL);
-    //normalize data shape
-    return data.data || [];
+    const artworks = data.data || [];
+    const seenImages = new Set();
+    return artworks.filter((art) => {
+        if (!art.image_id)
+            return true;
+        if (seenImages.has(art.image_id))
+            return false;
+        seenImages.add(art.image_id);
+        return true;
+    });
 }
 async function getArtWorkDetail(id) {
     const data = await getJSON(API_URL_DETAIL(id));
@@ -81,7 +86,6 @@ async function main() {
     }
 }
 //presentation layer
-///////////////////////////////////////////////
 function renderLoading() {
     state.textContent = "Loading...";
     gallery.innerHTML = "";
@@ -94,8 +98,7 @@ function clearStatus() {
     state.textContent = "";
     state.className = "";
 }
-///////////////////////////////////////////////
-////card display////
+//card display
 function renderArtWorks(artworks) {
     gallery.innerHTML = "";
     artworks.forEach((art) => {
@@ -130,7 +133,6 @@ function renderArtWorks(artworks) {
             (async () => {
                 try {
                     const details = await getArtWorkDetail(art.id);
-                    detail = details;
                     renderModal(details);
                 }
                 catch (error) {
@@ -175,7 +177,7 @@ function renderModal(details) {
     img.alt = details.thumbnail?.alt_text || "Artwork from the Chicago Museum";
     img.classList.add("modal-img");
     const artist = document.createElement("p");
-    artist.innerHTML = `<span class= "detail-label">Artist: </span> ${details.artist_display || "Unkown artist"}`;
+    artist.innerHTML = `<span class= "detail-label">Artist: </span> ${details.artist_display || "Unknown artist"}`;
     artist.classList.add("artist");
     const style = document.createElement("p");
     style.innerHTML = `<span class="detail-label">Style: </span> ${details.style_title || "No style found"}`;
@@ -184,12 +186,6 @@ function renderModal(details) {
     shortDescription.innerHTML = `<span class="detail-label">
     Description: </span> ${details.short_description || "No description found"}`;
     shortDescription.classList.add("shortDesc");
-    let isOpen = false;
-    moreInfoBtn.addEventListener("click", () => {
-        isOpen = !isOpen;
-        moreInfoBtn.textContent = isOpen ? "More info -" : "More info +";
-        longDescription.classList.toggle("show");
-    });
     const longDescription = document.createElement("p");
     longDescription.innerHTML = `<span class ="detail-label">Extended description: </span>${details.description || "No description details found"}`;
     longDescription.classList.add("longDesc");
@@ -208,9 +204,14 @@ function renderModal(details) {
     modalCard.classList.remove("hidden");
     modalOverlay.classList.remove("hidden");
     document.body.style.overflow = "hidden";
+    let isOpen = false;
+    moreInfoBtn.onclick = () => {
+        isOpen = !isOpen;
+        moreInfoBtn.textContent = isOpen ? "More info -" : "More info +";
+        longDescription.classList.toggle("show");
+    };
 }
-///////////////////////////////////////////////
-//data transformation: CATEGORIES
+//data transformation: categories
 function getCategories(artworks) {
     return [
         ...new Set(artworks
@@ -264,19 +265,18 @@ function applyFilters() {
     renderArtWorks(filtered);
 }
 //UI behaviour
-///////////input event///////////////
 let timeout;
 input.addEventListener("input", () => {
     clearTimeout(timeout);
     timeout = setTimeout(applyFilters, 300);
 });
-///////////menu btn///////////////
 function toggleMobileMenu() {
+    const isOpening = !mobileMenu.classList.contains("open");
     mobileMenu.classList.toggle("open");
     hamburgerBtn.classList.toggle("active");
+    document.body.style.overflow = isOpening ? "hidden" : "";
 }
 hamburgerBtn.addEventListener("click", toggleMobileMenu);
-///////////mobile menu///////////////
 function clearActiveButtons() {
     document
         .querySelectorAll(".btn-cat")
@@ -285,6 +285,7 @@ function clearActiveButtons() {
 function closeMobileMenu() {
     mobileMenu.classList.remove("open");
     hamburgerBtn.classList.remove("active");
+    document.body.style.overflow = "";
 }
 closeMenuBtn.addEventListener("click", () => {
     closeMobileMenu();
@@ -306,13 +307,13 @@ window.addEventListener("scroll", () => {
         scrollBtn.classList.remove("show");
     }
 });
-//MODAL CARD-> DETAILS
+//modal-card
 function closeModal() {
     modalOverlay.classList.add("hidden");
     modalCard.classList.add("hidden");
     closeModalBtn.classList.add("hidden");
     document.body.style.overflow = "";
-    moreInfoBtn.innerHTML = "More info +";
+    moreInfoBtn.textContent = "More info +";
 }
 closeModalBtn.addEventListener("click", closeModal);
 modalOverlay.addEventListener("click", closeModal);
