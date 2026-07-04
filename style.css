@@ -681,6 +681,9 @@ footer {
 }
 /*DESKTOP*/
 @media (min-width: 1440px) {
+  #description-large {
+    text-align: center;
+  }
   #gallery {
     grid-template-columns: repeat(4, 1fr);
   }
