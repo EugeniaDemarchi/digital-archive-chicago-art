@@ -73,7 +73,9 @@ header {
   grid-template-areas:
     "logo menu"
     "title title"
-    "description description";
+    "description description"
+    "descriptionLarge descriptionLarge";
+
   gap: var(--space-xl);
 }
 #logo {
@@ -159,7 +161,13 @@ h1 {
   font-weight: var(--weight-medium);
   padding-top: 2rem;
 }
-
+#description-large {
+  grid-area: descriptionLarge;
+  text-align: justify;
+  color: var(--color-text-muted);
+  font-size: clamp(var(--text-lg), 5vw, var(--text-xl));
+  font-family: var(--font-serif);
+}
 /*main*/
 
 /*search-section*/
