@@ -97,6 +97,16 @@ https://www.artic.edu/iiif/2/{image_id}/full/843,/0/default.jpg
 
 ---
 
+## Known issues
+
+**IIIF images intermittently blocked by Cloudflare (upstream, observed since ~December 2025)**
+
+Since around December 2025, the Art Institute of Chicago's IIIF image endpoint (`artic.edu/iiif/2/...`) has been intermittently returning `403 Forbidden` responses, carrying a `Cf-Mitigated: challenge` header and `Cross-Origin-Resource-Policy: same-origin`. This is Cloudflare's bot/security layer issuing a JS challenge to the image request — a challenge a plain `<img>` request can never solve — even though the museum's own API documentation states that hotlinking to IIIF images is permitted.
+
+This is not a bug in this app. The fetch logic, `image_id` handling, and IIIF URL construction all behave as intended; the same `403` is reproducible by requesting the image URL directly in a browser tab, entirely outside of this app, and it happens both on `localhost` and on the deployed Netlify site. Other third-party tools that consume the same endpoint have reported the identical failure (e.g. [dezoomify#911](https://github.com/lovasoa/dezoomify/issues/911), [gallery-dl#9371](https://github.com/mikf/gallery-dl/issues/9371)), and the museum's own API repo has an open issue tracking related CORS/image regressions ([data-aggregator#151](https://github.com/art-institute-of-chicago/data-aggregator/issues/151)).
+
+When it occurs, the app's `onerror` fallback (see [Features](#features)) correctly kicks in and shows the "No image" placeholder for artworks that actually do have a valid `image_id`, which is why the gallery can appear to be mostly missing images. There is no reliable client-side workaround for a CDN-level bot challenge — a permanent fix would mean serving images through a backend/serverless proxy instead of requesting them directly from the browser.
+
 ## Author
 
 **Eugenia Demarchi**
