@@ -150,6 +150,30 @@ function clearStatus(): void {
   state.className = "";
 }
 
+function loadImageWithRetry(
+  img: HTMLImageElement,
+  src: string,
+  maxRetries = 2,
+  delay = 800,
+): void {
+  let attempts = 0;
+
+  const attemptLoad = (): void => {
+    img.onerror = (): void => {
+      attempts++;
+      if (attempts <= maxRetries) {
+        setTimeout(attemptLoad, delay * attempts);
+      } else {
+        img.onerror = null;
+        img.src = PLACEHOLDER;
+      }
+    };
+    img.src = src;
+  };
+
+  attemptLoad();
+}
+
 //card display
 function renderArtWorks(artworks: ArtWork[]): void {
   gallery.innerHTML = "";
@@ -164,13 +188,16 @@ function renderArtWorks(artworks: ArtWork[]): void {
 
     const img = document.createElement("img");
 
-    img.src = art.image_id
-      ? `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`
-      : PLACEHOLDER;
-    img.onerror = (): void => {
-      img.onerror = null;
+    img.loading = "lazy";
+    if (art.image_id) {
+      loadImageWithRetry(
+        img,
+        `https://www.artic.edu/iiif/2/${art.image_id}/full/843,/0/default.jpg`,
+      );
+    } else {
       img.src = PLACEHOLDER;
-    };
+    }
+
     img.alt = art.title || "Untitled";
     img.classList.add("card-img");
 
@@ -232,13 +259,15 @@ function renderModal(details: ArtWorkDetail): void {
 
   const img = document.createElement("img");
 
-  img.src = details.image_id
-    ? `https://www.artic.edu/iiif/2/${details.image_id}/full/843,/0/default.jpg`
-    : PLACEHOLDER;
-  img.onerror = (): void => {
-    img.onerror = null;
+  img.loading = "lazy";
+  if (details.image_id) {
+    loadImageWithRetry(
+      img,
+      `https://www.artic.edu/iiif/2/${details.image_id}/full/843,/0/default.jpg`,
+    );
+  } else {
     img.src = PLACEHOLDER;
-  };
+  }
   img.alt = details.thumbnail?.alt_text || "Artwork from the Chicago Museum";
   img.classList.add("modal-img");
 
